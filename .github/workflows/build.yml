@@ -1,176 +1,40 @@
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080d18">
-<title>HOME Client V0.1</title>
+name: Build HOME Client V0.1
 
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;
- background:#080d18;
- color:white;
- font-family:Arial,sans-serif;
-}
-header{
- text-align:center;
- padding:45px 10px 30px;
-}
-.logo{
- width:68px;height:68px;
- border:2px solid #27aaff;
- border-radius:50%;
- display:grid;
- place-items:center;
- margin:auto auto 20px;
- font-size:36px;
- box-shadow:0 0 25px #168eff;
-}
-.home{
- font-size:43px;
- font-weight:1000;
- letter-spacing:5px;
- text-shadow:0 0 15px #168eff;
-}
-.client{
- color:#27baff;
- font-size:19px;
- letter-spacing:5px;
- margin-top:8px;
-}
-.subtitle{color:#91a5bd;margin-top:25px}
-.container{padding:15px;max-width:600px;margin:auto}
-.status{
- background:#14243a;
- padding:20px;
- border-radius:15px;
- margin-bottom:20px;
-}
-.status p{color:#91a5bd}
-.play{
- width:100%;
- padding:19px;
- border:1px solid #72caff;
- border-radius:15px;
- background:linear-gradient(135deg,#168eff,#0055cc);
- color:white;
- font-size:19px;
- font-weight:bold;
- box-shadow:0 0 20px #168eff55;
- margin-bottom:20px;
-}
-.title{color:#42baff;margin:25px 0 15px}
-.grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
-}
-.card{
- background:#14243a;
- border:1px solid #285079;
- border-radius:15px;
- padding:20px;
- min-height:100px;
-}
-.card b{display:block;margin-top:12px}
-.card small{color:#91a5bd}
-.option{
- background:#1b304b;
- padding:17px;
- margin:10px 0;
- border-radius:12px;
- display:flex;
- justify-content:space-between;
-}
-input{accent-color:#168eff}
-.note{
- color:#91a5bd;
- font-size:12px;
- line-height:1.5;
- margin-top:25px;
-}
-</style>
-</head>
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
 
-<body>
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-<header>
- <div class="logo">H</div>
- <div class="home">H O M E</div>
- <div class="client">Client</div>
- <div class="subtitle">Minecraft Bedrock Companion</div>
-</header>
+    steps:
+      - name: Download Source
+        uses: actions/checkout@v4
 
-<div class="container">
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
- <div class="status">
-  <b>HOME CLIENT V0.1</b>
-  <p>Android Prototype</p>
- </div>
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
- <button class="play" onclick="playMinecraft()">
-  ▶ PLAY MINECRAFT
- </button>
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
 
- <div class="title">QUICK ACCESS</div>
+      - name: Build APK
+        run: gradle assembleDebug
 
- <div class="grid">
-  <div class="card">
-   👁️
-   <b>View Model</b>
-   <small>Visual options</small>
-  </div>
-
-  <div class="card">
-   🔎
-   <b>Zoom</b>
-   <small>Zoom options</small>
-  </div>
-
-  <div class="card">
-   ▦
-   <b>HUD</b>
-   <small>HUD settings</small>
-  </div>
-
-  <div class="card">
-   ⚙️
-   <b>Settings</b>
-   <small>Client settings</small>
-  </div>
- </div>
-
- <div class="title">CLIENT OPTIONS</div>
-
- <div class="option">
-  FPS Counter
-  <input type="checkbox" checked>
- </div>
-
- <div class="option">
-  Compact HUD
-  <input type="checkbox">
- </div>
-
- <p class="note">
-  HOME CLIENT V0.1<br>
-  Floating H menu is designed for Minecraft gameplay.
- </p>
-
-</div>
-
-<script>
-function playMinecraft(){
- if(window.Android){
-  Android.openMinecraft();
- }else{
-  alert("Android integration belum tersedia.");
- }
-}
-</script>
-
-</body>
-</html>
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HOME-Client-V0.1
+          path: app/build/outputs/apk/debug/app-debug.apk
