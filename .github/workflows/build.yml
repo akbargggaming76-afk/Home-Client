@@ -1,220 +1,176 @@
 
-name: Build HOME CLIENT V0.1
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d18">
+<title>HOME Client V0.1</title>
 
-on:
-  workflow_dispatch:
-  push:
-    branches: [main, master]
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#080d18;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ text-align:center;
+ padding:45px 10px 30px;
+}
+.logo{
+ width:68px;height:68px;
+ border:2px solid #27aaff;
+ border-radius:50%;
+ display:grid;
+ place-items:center;
+ margin:auto auto 20px;
+ font-size:36px;
+ box-shadow:0 0 25px #168eff;
+}
+.home{
+ font-size:43px;
+ font-weight:1000;
+ letter-spacing:5px;
+ text-shadow:0 0 15px #168eff;
+}
+.client{
+ color:#27baff;
+ font-size:19px;
+ letter-spacing:5px;
+ margin-top:8px;
+}
+.subtitle{color:#91a5bd;margin-top:25px}
+.container{padding:15px;max-width:600px;margin:auto}
+.status{
+ background:#14243a;
+ padding:20px;
+ border-radius:15px;
+ margin-bottom:20px;
+}
+.status p{color:#91a5bd}
+.play{
+ width:100%;
+ padding:19px;
+ border:1px solid #72caff;
+ border-radius:15px;
+ background:linear-gradient(135deg,#168eff,#0055cc);
+ color:white;
+ font-size:19px;
+ font-weight:bold;
+ box-shadow:0 0 20px #168eff55;
+ margin-bottom:20px;
+}
+.title{color:#42baff;margin:25px 0 15px}
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+.card{
+ background:#14243a;
+ border:1px solid #285079;
+ border-radius:15px;
+ padding:20px;
+ min-height:100px;
+}
+.card b{display:block;margin-top:12px}
+.card small{color:#91a5bd}
+.option{
+ background:#1b304b;
+ padding:17px;
+ margin:10px 0;
+ border-radius:12px;
+ display:flex;
+ justify-content:space-between;
+}
+input{accent-color:#168eff}
+.note{
+ color:#91a5bd;
+ font-size:12px;
+ line-height:1.5;
+ margin-top:25px;
+}
+</style>
+</head>
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+<body>
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+<header>
+ <div class="logo">H</div>
+ <div class="home">H O M E</div>
+ <div class="client">Client</div>
+ <div class="subtitle">Minecraft Bedrock Companion</div>
+</header>
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+<div class="container">
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.7'
+ <div class="status">
+  <b>HOME CLIENT V0.1</b>
+  <p>Android Prototype</p>
+ </div>
 
-      - name: Create HOME CLIENT HTML
-        run: |
-          mkdir -p app/src/main/assets
+ <button class="play" onclick="playMinecraft()">
+  ▶ PLAY MINECRAFT
+ </button>
 
-          cat > app/src/main/assets/index.html <<'HTML_END'
-          <!DOCTYPE html>
-          <html lang="id">
-          <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <meta name="theme-color" content="#080d18">
-          <title>HOME Client</title>
-          <style>
-          *{box-sizing:border-box}
-          body{margin:0;background:#080d18;color:white;font-family:Arial,sans-serif}
-          header{text-align:center;padding:35px 10px}
-          .home{font-size:43px;font-weight:1000;letter-spacing:5px;color:white;text-shadow:0 0 15px #168eff}
-          .client{font-size:19px;color:#27baff;letter-spacing:5px;margin-top:8px}
-          .logo{width:65px;height:65px;border:2px solid #27aaff;border-radius:50%;display:grid;place-items:center;margin:0 auto 20px;font-size:35px;font-weight:bold;box-shadow:0 0 20px #168eff}
-          .container{padding:15px;max-width:600px;margin:auto}
-          .title{color:#42baff;margin:20px 0 12px}
-          .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-          .card{background:#14243a;border:1px solid #285079;border-radius:15px;padding:20px;min-height:95px}
-          .card b{display:block;margin-top:10px}
-          .card small{color:#91a5bd}
-          .status{background:#14243a;padding:15px;border-radius:12px}
-          button{border:0;background:#168eff;color:white;border-radius:12px;padding:12px;font-weight:bold}
-          #bubble{position:fixed;right:20px;bottom:25px;width:62px;height:62px;border-radius:50%;font-size:28px;border:2px solid white;box-shadow:0 0 20px #168eff}
-          #menu{display:none;position:fixed;inset:0;background:#000b;align-items:end}
-          .sheet{background:#101e32;border-radius:22px 22px 0 0;width:100%;padding:22px;min-height:300px}
-          .option{background:#1b304b;padding:16px;margin:10px 0;border-radius:12px;display:flex;justify-content:space-between}
-          </style>
-          </head>
-          <body>
-          <header>
-            <div class="logo">H</div>
-            <div class="home">H O M E</div>
-            <div class="client">Client</div>
-            <p style="color:#91a5bd">Minecraft Bedrock Companion</p>
-          </header>
-          <div class="container">
-            <div class="status">
-              <b>HOME CLIENT V0.1</b>
-              <p style="color:#91a5bd">Android Prototype</p>
-            </div>
-            <div class="title">QUICK ACCESS</div>
-            <div class="grid">
-              <div class="card" onclick="openMenu()">
-                👁️ <b>View Model</b><small>Visual options</small>
-              </div>
-              <div class="card" onclick="openMenu()">
-                🔎 <b>Zoom</b><small>Zoom options</small>
-              </div>
-              <div class="card" onclick="openMenu()">
-                ▦ <b>HUD</b><small>HUD settings</small>
-              </div>
-              <div class="card" onclick="openMenu()">
-                ⚙️ <b>Settings</b><small>Client settings</small>
-              </div>
-            </div>
-            <div class="title">CLIENT OPTIONS</div>
-            <div class="option">FPS Counter <input type="checkbox" checked></div>
-            <div class="option">Compact HUD <input type="checkbox"></div>
-            <p style="color:#91a5bd;font-size:12px">
-              HOME CLIENT V0.1 - Antarmuka prototype.
-              Pengaturan belum mengubah fitur internal Minecraft.
-            </p>
-          </div>
-          <button id="bubble" onclick="openMenu()">H</button>
-          <div id="menu" onclick="if(event.target===this)closeMenu()">
-            <div class="sheet">
-              <button onclick="closeMenu()">TUTUP</button>
-              <h2>HOME CLIENT MENU</h2>
-              <div class="option">View Model <input type="checkbox" checked></div>
-              <div class="option">Zoom <input type="checkbox"></div>
-              <div class="option">HUD <input type="checkbox" checked></div>
-              <div class="option">FPS <input type="checkbox" checked></div>
-            </div>
-          </div>
-          <script>
-          function openMenu(){
-            document.getElementById('menu').style.display='flex';
-          }
-          function closeMenu(){
-            document.getElementById('menu').style.display='none';
-          }
-          </script>
-          </body>
-          </html>
-          HTML_END
+ <div class="title">QUICK ACCESS</div>
 
-      - name: Create Android Project
-        run: |
-          mkdir -p app/src/main/java/com/homeclient/app
+ <div class="grid">
+  <div class="card">
+   👁️
+   <b>View Model</b>
+   <small>Visual options</small>
+  </div>
 
-          cat > settings.gradle <<'GRADLE_END'
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          rootProject.name = 'HomeClient'
-          include ':app'
-          GRADLE_END
+  <div class="card">
+   🔎
+   <b>Zoom</b>
+   <small>Zoom options</small>
+  </div>
 
-          cat > build.gradle <<'GRADLE_END'
-          plugins {
-              id 'com.android.application' version '8.6.1' apply false
-          }
-          GRADLE_END
+  <div class="card">
+   ▦
+   <b>HUD</b>
+   <small>HUD settings</small>
+  </div>
 
-          cat > gradle.properties <<'GRADLE_END'
-          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-          android.useAndroidX=true
-          GRADLE_END
+  <div class="card">
+   ⚙️
+   <b>Settings</b>
+   <small>Client settings</small>
+  </div>
+ </div>
 
-          cat > app/build.gradle <<'GRADLE_END'
-          plugins {
-              id 'com.android.application'
-          }
+ <div class="title">CLIENT OPTIONS</div>
 
-          android {
-              namespace 'com.homeclient.app'
-              compileSdk 35
+ <div class="option">
+  FPS Counter
+  <input type="checkbox" checked>
+ </div>
 
-              defaultConfig {
-                  applicationId 'com.homeclient.app'
-                  minSdk 23
-                  targetSdk 28
-                  versionCode 1
-                  versionName '0.1'
-              }
-          }
-          GRADLE_END
+ <div class="option">
+  Compact HUD
+  <input type="checkbox">
+ </div>
 
-          cat > app/src/main/AndroidManifest.xml <<'XML_END'
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application
-                  android:theme="@android:style/Theme.Material.NoActionBar"
-                  android:label="HOME Client">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN"/>
-                          <category android:name="android.intent.category.LAUNCHER"/>
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          XML_END
+ <p class="note">
+  HOME CLIENT V0.1<br>
+  Floating H menu is designed for Minecraft gameplay.
+ </p>
 
-          cat > app/src/main/java/com/homeclient/app/MainActivity.java <<'JAVA_END'
-          package com.homeclient.app;
+</div>
 
-          import android.app.Activity;
-          import android.os.Bundle;
-          import android.webkit.WebView;
-          import android.webkit.WebSettings;
+<script>
+function playMinecraft(){
+ if(window.Android){
+  Android.openMinecraft();
+ }else{
+  alert("Android integration belum tersedia.");
+ }
+}
+</script>
 
-          public class MainActivity extends Activity {
-              @Override
-              protected void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-
-                  WebView web = new WebView(this);
-                  WebSettings settings = web.getSettings();
-                  settings.setJavaScriptEnabled(true);
-                  settings.setDomStorageEnabled(true);
-
-                  web.loadUrl("file:///android_asset/index.html");
-                  setContentView(web);
-              }
-          }
-          JAVA_END
-
-      - name: Build APK
-        run: gradle --no-daemon assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: HOME-CLIENT-V0.1-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+</body>
+</html>
