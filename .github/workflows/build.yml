@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Client</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b1020;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 25px;
+  background: #111a30;
+}
+
+h1 {
+  color: #65a5ff;
+  margin-bottom: 5px;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  background: #17243c;
+  padding: 18px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+button {
+  background: #3478ed;
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: bold;
+}
+
+.module {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px;
+  margin: 8px 0;
+  background: #202e49;
+  border-radius: 10px;
+}
+
+.switch {
+  width: 42px;
+  height: 23px;
+  border-radius: 20px;
+  background: #555;
+  position: relative;
+  cursor: pointer;
+}
+
+.switch::after {
+  content: "";
+  width: 17px;
+  height: 17px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: .2s;
+}
+
+.switch.active {
+  background: #3478ed;
+}
+
+.switch.active::after {
+  left: 22px;
+}
+
+#bubble {
+  position: fixed;
+  right: 18px;
+  top: 45%;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #3478ed;
+  border: 2px solid #9bc2ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: bold;
+  z-index: 99;
+  cursor: pointer;
+  touch-action: none;
+}
+
+#menu {
+  display: none;
+  position: fixed;
+  right: 15px;
+  top: 25%;
+  width: 260px;
+  max-height: 65vh;
+  overflow-y: auto;
+  background: #101a2d;
+  border: 1px solid #426bb0;
+  border-radius: 16px;
+  padding: 15px;
+  z-index: 100;
+  box-shadow: 0 8px 30px #0009;
+}
+
+#menu h2 {
+  color: #65a5ff;
+  font-size: 17px;
+}
+
+.small {
+  color: #a9bad7;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>HOME CLIENT</h1>
+  <p class="small">Minecraft Bedrock Client</p>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>Welcome Home</h2>
+    <p class="small">Your Minecraft, your style.</p>
+    <button onclick="openMinecraft()">PLAY MINECRAFT</button>
+  </div>
+
+  <div class="card">
+    <h3>Client Features</h3>
+    <p>Floating H Menu</p>
+    <p>Custom HUD</p>
+    <p>Visual Settings</p>
+  </div>
+
+  <div class="card">
+    <h3>Version</h3>
+    <p>Home Client v0.2</p>
+  </div>
+</div>
+
+<div id="bubble">H</div>
+
+<div id="menu">
+  <h2>HOME CLIENT <span onclick="toggleMenu()" style="float:right;cursor:pointer">✕</span></h2>
+  <p class="small">CLIENT MODULES</p>
+
+  <div id="modules"></div>
+</div>
+
+<script>
+const features = [
+  "View Model",
+  "Zoom",
+  "HUD",
+  "Crosshair",
+  "Fullbright",
+  "FPS Counter",
+  "Animations",
+  "Keystrokes"
+];
+
+const modules = document.getElementById("modules");
+
+features.forEach(name => {
+  const item = document.createElement("div");
+  item.className = "module";
+
+  const title = document.createElement("span");
+  title.textContent = name;
+
+  const sw = document.createElement("div");
+  sw.className = "switch";
+
+  sw.onclick = () => sw.classList.toggle("active");
+
+  item.appendChild(title);
+  item.appendChild(sw);
+  modules.appendChild(item);
+});
+
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  menu.style.display =
+    menu.style.display === "block" ? "none" : "block";
+}
+
+document.getElementById("bubble").onclick = toggleMenu;
+
+function openMinecraft() {
+  alert("Buka Minecraft melalui integrasi Android launcher.");
+}
+
+// Drag tombol H
+const bubble = document.getElementById("bubble");
+let dragging = false;
+let startX, startY, initialX, initialY;
+
+bubble.addEventListener("pointerdown", e => {
+  dragging = false;
+  startX = e.clientX;
+  startY = e.clientY;
+  initialX = bubble.offsetLeft;
+  initialY = bubble.offsetTop;
+  bubble.setPointerCapture(e.pointerId);
+});
+
+bubble.addEventListener("pointermove", e => {
+  if (!bubble.hasPointerCapture(e.pointerId)) return;
+
+  let dx = e.clientX - startX;
+  let dy = e.clientY - startY;
+
+  if (Math.abs(dx) + Math.abs(dy) > 8) dragging = true;
+
+  if (dragging) {
+    bubble.style.left = Math.max(0, Math.min(
+      innerWidth - bubble.offsetWidth, initialX + dx
+    )) + "px";
+    bubble.style.top = Math.max(0, Math.min(
+      innerHeight - bubble.offsetHeight, initialY + dy
+    )) + "px";
+    bubble.style.right = "auto";
+  }
+});
+
+bubble.addEventListener("pointerup", () => {
+  if (!dragging) toggleMenu();
+});
+</script>
+
+</body>
+</html>
